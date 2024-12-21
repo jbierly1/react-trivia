@@ -10,10 +10,7 @@ function QuizBox(){
     <li className="list-group-item">the Birthday Ring</li>
     <li className="list-group-item">a picture of Gandalf</li>
   </ul>
-  <div className="card-body">
-    <a href="#" className="card-link">Card link</a>
-    <a href="#" className="card-link">Another link</a>
-  </div>
+
 </div>
 }
 
