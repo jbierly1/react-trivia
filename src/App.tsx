@@ -8,12 +8,13 @@ import Buttons from './Buttons.tsx'
 
 function App() {
 
+  const [gameStarted,setGameStarted]=useState(false)
   return (
     <div>
       <Welcome></Welcome>
-      <Start></Start>
-      <QuizBox></QuizBox>
-      <Buttons></Buttons>
+      {!gameStarted &&<Start onClick={()=> setGameStarted(true)}>Start</Start>}
+      {gameStarted&&<QuizBox></QuizBox>}
+      {gameStarted&&<Buttons></Buttons>}
 
     </div>
   )
