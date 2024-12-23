@@ -37,14 +37,35 @@ function App() {
 
   const [gameState,setGameState]=useState({
     CurrentQuestion: QuestionList[0],
-    gameStarted: false
+    gameStarted: false,
+    answerTracker:[0],
+    currentQuestionNotAnswered: true,
     }
 )
+
+  const answerSelector = (key: number, correct: number) => 
+    {console.log("Selected key:", key, "Correct key:", correct); 
+      if (!gameState.currentQuestionNotAnswered) {return}
+      else{
+        setGameState(prevState => { const newTracker = prevState.answerTracker.map((value, index) => index === 0 ? (key === correct ? 1 : 2) : value ); 
+          console.log("Updated answerTracker:", newTracker); 
+          return { ...prevState, answerTracker: newTracker }; }); };
+      }
+
+
   return (
     <div>
       <Welcome></Welcome>
       {!gameState.gameStarted &&<Start onClick={()=> setGameState({...gameState, gameStarted:true})}>Start</Start>}
-      {gameState.gameStarted&&<QuizBox currentQuestion={gameState.CurrentQuestion}></QuizBox>}
+      
+      {gameState.gameStarted&&<QuizBox currentQuestion={gameState.CurrentQuestion} 
+      answerTracker={gameState.answerTracker}
+      {...(gameState.currentQuestionNotAnswered) ? {answerSelector}: {}}
+      currentQuestionNotAnswered={gameState.currentQuestionNotAnswered}
+      ></QuizBox>}
+
+
+
       {gameState.gameStarted&&<Buttons></Buttons>}
 
     </div>

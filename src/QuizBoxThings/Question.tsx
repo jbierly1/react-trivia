@@ -3,7 +3,7 @@ interface Props{
     }
 
 const Question=({questionText}: Props)=>{
-    return <div>{questionText}</div>
+    return <h5 className="card-title">{questionText}</h5>
 }
 
 export default Question

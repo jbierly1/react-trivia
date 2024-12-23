@@ -10,25 +10,25 @@ interface Props{
     Answer4: string,
     Answered: boolean,
     AnsweredCorrectly: boolean,
-    Correct:  number
-  }
+    Correct:  number,
+  },
+  answerSelector?: (key: number, correct: number) => void,
+  answerTracker: Array<number>,
+  currentQuestionNotAnswered:boolean
 }
-const QuizBox=({currentQuestion}: Props)=>{
+
+
+const QuizBox=({currentQuestion, answerSelector}: Props)=>{
   return <div className="card mt-4 w-50 p-3 mx-auto" style={{width: '18rem;'}}>
 
   <div className="card-body">
     <Question questionText={currentQuestion.Question}></Question>
-    <h5 className="card-title">What has it gots in its pockets? Gollum wants to know</h5>
   </div>
   <ul className="list-group list-group-flush">
-    <Answer answerText={currentQuestion.Answer1}></Answer>
-    <Answer answerText={currentQuestion.Answer2}></Answer>
-    <Answer answerText={currentQuestion.Answer3}></Answer>
-    <Answer answerText={currentQuestion.Answer4}></Answer>
-    <li className="list-group-item">a rock</li>
-    <li className="list-group-item">a sword</li>
-    <li className="list-group-item">the Birthday Ring</li>
-    <li className="list-group-item">a picture of Gandalf</li>
+    <Answer answerKey={1} answerText={currentQuestion.Answer1} answerSelector={answerSelector} currentQuestion={currentQuestion}></Answer>
+    <Answer answerKey={2} answerText={currentQuestion.Answer2} answerSelector={answerSelector} currentQuestion={currentQuestion}></Answer>
+    <Answer answerKey={3} answerText={currentQuestion.Answer3} answerSelector={answerSelector} currentQuestion={currentQuestion}></Answer>
+    <Answer answerKey={4} answerText={currentQuestion.Answer4} answerSelector={answerSelector} currentQuestion={currentQuestion}></Answer>
   </ul>
 
 </div>
