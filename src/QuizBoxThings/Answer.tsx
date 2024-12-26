@@ -8,14 +8,19 @@ interface Props{
         Answer2: string,
         Answer3: string,
         Answer4: string,
-        Answered: boolean,
-        AnsweredCorrectly: boolean,
         Correct:  number,
       }
+      answered: number
+      clicked: number
     }
 
-const Answer=({answerText, answerSelector, currentQuestion, answerKey}: Props)=>{
-    return <li className="list-group-item" onClick= {answerSelector ?()=> answerSelector(answerKey, currentQuestion.Correct): undefined}>{answerText}</li>
+const Answer=({answerText, answerSelector, currentQuestion, answerKey, answered, clicked}: Props)=>{
+    if((answered===1) && (currentQuestion.Correct===answerKey)){
+        return <li className="list-group-item list-group-item-success">{answerText}</li>
+    }else if((answered===2) && (clicked==answerKey)){
+        return <li className="list-group-item list-group-item-danger">{answerText}</li>
+    }else{
+        return <li className="list-group-item" onClick= {answerSelector ?()=> answerSelector(answerKey, currentQuestion.Correct): undefined}>{answerText}</li>}
     }
 export default Answer
 
