@@ -1,5 +1,6 @@
 import Question from './Question.tsx'
 import Answer from './Answer.tsx'
+import Score from './Score.tsx'
 
 interface Props{
   currentQuestion: {
@@ -12,15 +13,17 @@ interface Props{
   },
   answerSelector?: (key: number, correct: number) => void,
   answered: number,
-  clicked: number
+  clicked: number,
+  gameScore: number
 }
 
 
-const QuizBox=({currentQuestion, answerSelector, answered, clicked}: Props)=>{
+const QuizBox=({currentQuestion, answerSelector, answered, clicked, gameScore}: Props)=>{
   return <div className="card mt-4 w-50 p-3 mx-auto" style={{width: '18rem;'}}>
 
   <div className="card-body">
     <Question questionText={currentQuestion.Question}></Question>
+    <Score gameScore={gameScore}></Score>
   </div>
   <ul className="list-group list-group-flush">
     <Answer answerKey={1} answerText={currentQuestion.Answer1} answerSelector={answerSelector} currentQuestion={currentQuestion} answered={answered} clicked={clicked}></Answer>
