@@ -6,7 +6,7 @@ import Start from './Start.tsx'
 import QuizBox from './QuizBoxThings/QuizBox.tsx'
 import Buttons from './Buttons.tsx'
 import TestingQuiz from './TestingQuiz.tsx'
-import Score from './QuizBoxThings/Score.tsx'
+import FinalScreen from './FinalScreen.tsx'
 //next tasks:
 //make colors change based on correct or incorrect answer, and stay rendered that way based on status of 'answered' for that question
 
@@ -142,9 +142,18 @@ function App() {
     gameStarted: false,
     answerTracker:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     answersClicked:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    score: 0
+    score: 0,
+    gameEnded:false
     }
 )
+  const initialState = {
+    CurrentQuestion: 0,
+    gameStarted: false,
+    answerTracker:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    answersClicked:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    score: 0,
+    gameEnded:false
+  }
 
   const answerSelector = (key: number, correct: number) => 
     {
@@ -152,23 +161,31 @@ function App() {
           const newanswersClicked = prevState.answersClicked.map((value, index)=> index === gameState.CurrentQuestion ? key:value)
           const newScore= key === correct ? prevState.score+1:prevState.score
           console.log("Updated answerTracker:", newTracker); 
-          return { ...prevState, answerTracker: newTracker, answersClicked: newanswersClicked, score:newScore}; }); ;
+          return { ...prevState, answerTracker: newTracker, answersClicked: newanswersClicked, score:newScore}; });
       }
 
     const currentQuestionUpdater = (prevOrNext: number) =>
       {setGameState(prevState => 
         {const newCurrentQuestion= prevOrNext === 0 ? prevState.CurrentQuestion-1: prevState.CurrentQuestion +1
-          return {...prevState, CurrentQuestion: newCurrentQuestion}
+          const didWeEnd= newCurrentQuestion>19? true:false
+          console.log(didWeEnd)
+          return {...prevState, CurrentQuestion: newCurrentQuestion, gameEnded: didWeEnd}
   })
 
+    }
+
+    const gameResetter = () =>{
+      console.log('fired')
+      setGameState(initialState)
     }
 
 
   return (
     <div>
-      {!gameState.gameStarted&&<Welcome></Welcome>}
-      {!gameState.gameStarted &&<Start onClick={()=> setGameState({...gameState, gameStarted:true})}>Start</Start>}
-      {gameState.gameStarted&&<QuizBox currentQuestion={QuestionList[gameState.CurrentQuestion]} 
+      {!gameState.gameStarted&&!gameState.gameEnded&&<Welcome></Welcome>}
+      {!gameState.gameStarted &&!gameState.gameEnded&&<Start onClick={()=> setGameState({...gameState, gameStarted:true})}>Start</Start>}
+      {gameState.gameEnded&&<FinalScreen gameScore={gameState.score} gameResetter={gameResetter}></FinalScreen>}
+      {gameState.gameStarted&&!gameState.gameEnded&&<QuizBox currentQuestion={QuestionList[gameState.CurrentQuestion]} 
       {...(gameState.answerTracker[gameState.CurrentQuestion] ==0 ? {answerSelector} : {})}
       answered={gameState.answerTracker[gameState.CurrentQuestion]}
       clicked = {gameState.answersClicked[gameState.CurrentQuestion]}
@@ -178,7 +195,7 @@ function App() {
 
 
 
-      {gameState.gameStarted&&<Buttons currentQuestionUpdater = {currentQuestionUpdater} currentQuestion={gameState.CurrentQuestion}></Buttons>}
+      {gameState.gameStarted&&<Buttons currentQuestionUpdater = {currentQuestionUpdater} currentQuestion={gameState.CurrentQuestion} gameEnded={gameState.gameEnded}></Buttons>}
 
     </div>
   )
